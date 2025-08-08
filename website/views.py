@@ -2,9 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm
+from .models import Record
 
 
 def home(request):
+
+    # Grab records from database (is it a great idea to grab them before user is logged in? How would this affect view permissions?)
+    records = Record.objects.all()
+
+
     # Check if logging in
     if request.method == "POST":
         user_name = request.POST['user_name']
@@ -19,7 +25,7 @@ def home(request):
             messages.success(request, 'There was an error logging in.  Please try again')
             return redirect('home')
     else:
-        return render(request, 'home.html', {})
+        return render(request, 'home.html', {'records': records})
 
 def logout_user(request):
     logout(request)
@@ -41,3 +47,4 @@ def register_user(request):
     else:
         form = SignUpForm()
         return render(request, 'register.html', {'form':form})
+    return render(request, 'register.html', {'form':form})
