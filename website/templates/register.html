@@ -5,6 +5,17 @@
     <div class="col-md-6 offset-md-3">
         <form method="POST" action="">
             {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert warning alert dissemble fade show" role="alert">
+                    Your Form contains Errors:
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {{field.errors}}
+                        {% endif %}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-disniss="alert" aria-label="close"></button>
+                </div>
+            {% endif %}
             {{ form.as_p }}
             <br />
             <button type="submit" class="btn btn-secondary">Register</button>
